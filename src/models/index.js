@@ -5,7 +5,7 @@ const Comments = require('./Comments.model')
 const Event = require('./Event.model')
 const PaymentArtist = require('./PaymentArtist.model')
 const PaymentUser = require('./PaymentUser.model')
-const Ticket = require('./ticket.model')
+const Ticket = require('./Ticket.model')
 const EmptySans = require('./EmptySans.model')
 const User = require('./User.model')
 
