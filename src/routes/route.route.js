@@ -37,7 +37,7 @@ router.delete('/users/:id', userController.DeleteUser);
 
 // Event routes
 router.get('/events', eventController.GetAllEvents);
-router.get('/events/:id', eventControlltEventById);
+router.get('/events/:id', eventController.GetEventById);
 router.get('/events/artist/:artistId', eventController.GetEventsByArtistId);
 router.post('/events', eventController.CreateEvent);
 router.put('/events/:id', eventController.UpdateEvent);
