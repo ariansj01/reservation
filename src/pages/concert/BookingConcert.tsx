@@ -89,7 +89,7 @@ const BookingConcert = () => {
     timestamp: string;
     eventId: number;
   }>>([]);
-  // console.log(setPaymentLogs(paymentLogs))
+  console.log(setPaymentLogs(paymentLogs))
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState({
     text: '',
@@ -99,6 +99,7 @@ const BookingConcert = () => {
   const [chairs, setChairs] = useState<Chair[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  console.log(tickets)
   const fetchEvents = async () => {
     try {
       const response = await api.get('/events')
