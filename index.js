@@ -12,12 +12,13 @@ const router = require('./src/routes/route.route')
 const cors = require('cors');
 env.config()
 
-app.use(cors({
-  origin: '*'
-}));
 
 const app = express()
 app.use(express.json());
+
+app.use(cors({
+  origin: '*'
+}));
 // app.use(corsPolicy);
 
 // Session Configuration
