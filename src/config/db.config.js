@@ -7,7 +7,6 @@ const {Sequelize} = require('sequelize')
 const isProduction = process.env.MYSQLDATABASE && process.env.MYSQLUSER && process.env.MYSQLPASSWORD;
 
 let dbSequelize;
-
 if (isProduction) {
   // Production: Use MySQL with Railway environment variables
   dbSequelize = new Sequelize(
