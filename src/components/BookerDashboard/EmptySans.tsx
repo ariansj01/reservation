@@ -82,9 +82,18 @@ const EmptySans = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+    let user : any = localStorage.getItem('user')
+    let artistId = JSON.parse(user)
       // Ensure dates are properly formatted before sending
       const formattedData = {
-        ...formData,
+        title : formData.title,
+        description : formData.description,
+        artistId : artistId[0].id,
+        vipPrice : formData.vipPrice,
+        normalPrice : formData.normalPrice,
+        allSellTicketPrice : formData.allSellTicketPrice,
+        emptySansId : formData.emptySansId,
+        reserved : 0,
         startDate: new Date(formData.startDate).toISOString(),
         endDate: new Date(formData.endDate).toISOString(),
         openBuyTicket: new Date(formData.openBuyTicket).toISOString(),

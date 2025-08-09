@@ -66,7 +66,8 @@ const EventHistory = () => {
       <h2 className="text-2xl font-semibold text-white mb-6">Event History</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((event) => (
+        
+        {events.length < 1 ? events.map((event) => (
           <motion.div
             key={event.id}
             initial={{ opacity: 0, y: 20 }}
@@ -109,7 +110,7 @@ const EventHistory = () => {
               View Details
             </motion.button>
           </motion.div>
-        ))}
+        )) : (<p>no active event</p>)}
       </div>
 
       {/* Event Details Modal */}

@@ -82,8 +82,12 @@ const Login = () => {
     }
     try {
       let login = await api.post('/login', formData)
+      let users = await api.get('/users')
+      let user = users.data.data.filter((user:any) => user.email === formData.email)
+
       if (login.status === 200) {
         localStorage.setItem('email', formData.email);
+        localStorage.setItem('user' , JSON.stringify(user))
         localStorage.setItem('AccessToken', login.data.AccessToken);
         localStorage.setItem('RefreshToken', login.data.RefreshToken);
         setNotificationMessage('Login successful!');

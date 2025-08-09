@@ -37,10 +37,10 @@ const Register = () => {
         setNotificationMessage('Registration successful! Please verify your email.');
         setNotificationType('success');
         setShowNotification(true);
-        const response = await api.post('/send-verification-email',formData.email)
-        console.log(response)
+        // const response = await api.post('/send-verification-email',formData.email)
+        // console.log(response)
         setTimeout(() => {
-          navigate('/Landing');
+          navigate('/login');
           // navigate('/verify-email');
         }, 2000);
       }

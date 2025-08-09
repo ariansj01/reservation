@@ -89,7 +89,7 @@ const BookingConcert = () => {
     timestamp: string;
     eventId: number;
   }>>([]);
-  console.log(setPaymentLogs(paymentLogs))
+  // console.log(setPaymentLogs(paymentLogs))
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState({
     text: '',
