@@ -49,16 +49,7 @@
 // module.exports = cors(corsOptions);
 
 const cors = require('cors');
-const allowedOrigins = ['https://reservation-flame-xi.vercel.app'];
 
 app.use(cors({
-  origin: function(origin, callback) {
-    if(!origin) return callback(null, true); // برای تست با Postman و غیره
-    if(allowedOrigins.indexOf(origin) === -1){
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true,
+  origin: '*'
 }));
