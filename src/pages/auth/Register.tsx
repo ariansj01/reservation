@@ -27,7 +27,9 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+    e.preventDefault()
       let register = await api.post('/users', formData)
+      console.log(register)
       if (register.status === 201) {
         localStorage.setItem('AccessToken', register.data.AccessToken);
         localStorage.setItem('RefreshToken', register.data.RefreshToken);

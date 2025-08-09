@@ -7,7 +7,8 @@ const api = axios.create({
 }) 
 
 // List of public routes that don't require authentication
-const publicRoutes = ['/login', '/register', '/verify_token' , '/usersuser/:email', '/verify-captcha', '/verification-email', '/send-verification-email'];
+// const publicRoutes = ['/login', '/register', '/verify_token' , '/usersuser/:email', '/verify-captcha', '/verification-email', '/send-verification-email'];
+const publicRoutes = [''];
 
 // Check if the current route is public
 const isPublicRoute = (url: string) => {

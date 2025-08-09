@@ -550,6 +550,25 @@ const BookingConcert = () => {
     }
   };
 
+  // Check if user is authenticated
+  const isAuthenticated = localStorage.getItem('AccessToken');
+  
+  if (!isAuthenticated) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <div className="text-white text-xl mb-4">برای رزرو کنسرت ابتدا وارد شوید</div>
+          <button
+            onClick={() => navigate('/login')}
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+          >
+            ورود به سیستم
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
