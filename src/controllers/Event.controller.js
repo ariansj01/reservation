@@ -164,7 +164,7 @@ const GetEventsByArtistId = async (req, res) => {
 const CreateEvent = async (req, res) => {
     try {
         // Check if artist exists
-        const artist = await Artist.create(req.body);
+        const artist = await Event.create(req.body);
         if (!artist) {
             return res.status(404).json({ message: 'Artist not found' });
         }

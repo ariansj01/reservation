@@ -23,17 +23,13 @@ const Event = sequelize.define('Event', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    location: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
     artistId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: 'Artists',
-            key: 'id'
-        }
+        // references: {
+        //     model: 'Artists',
+        //     key: 'id'
+        // }
     },
     vipPrice: {
         type: DataTypes.STRING,
@@ -58,10 +54,10 @@ const Event = sequelize.define('Event', {
     emptySansId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: 'EmptySans',
-            key: 'id'
-        }
+        // references: {
+        //     model: 'EmptySans',
+        //     key: 'id'
+        // }
     },
     reserved: {
         type: DataTypes.STRING,
