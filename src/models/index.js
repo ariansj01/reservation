@@ -1,5 +1,4 @@
 const db = require('../config/db.config')
-const Artist = require('./Artist.model')
 const Cheirs = require('./Cheirs.model')
 const Comments = require('./Comments.model')
 const Event = require('./Event.model')
@@ -8,11 +7,11 @@ const PaymentUser = require('./PaymentUser.model')
 const Ticket = require('./Ticket.model')
 const EmptySans = require('./EmptySans.model')
 const User = require('./User.model')
-
+const Artist = require('./Artist.model')
 // User has many Comments
 User.hasMany(Comments , {
     foreignKey : 'userId',
-    as: 'comments'
+    as: 'userComments'
 })
 Comments.belongsTo(User , {
     foreignKey : 'userId',
@@ -22,7 +21,7 @@ Comments.belongsTo(User , {
 // User has many PaymentUser
 User.hasMany(PaymentUser , {
     foreignKey : 'userId',
-    as: 'payments'
+    as: 'userPayments'
 })
 PaymentUser.belongsTo(User , {
     foreignKey : 'userId',
@@ -52,7 +51,7 @@ Cheirs.belongsTo(Ticket , {
 // Event has many Comments
 Event.hasMany(Comments , {
     foreignKey : 'eventId',
-    as: 'comments'
+    as: 'eventComments'
 })
 Comments.belongsTo(Event , {
     foreignKey : 'eventId',
@@ -62,7 +61,7 @@ Comments.belongsTo(Event , {
 // Event has many PaymentUser
 Event.hasMany(PaymentUser, {
     foreignKey : 'eventId',
-    as: 'payments'
+    as: 'eventPayments'
 })
 PaymentUser.belongsTo(Event , {
     foreignKey : 'eventId',
@@ -93,36 +92,36 @@ Cheirs.belongsTo(User , {
     as: 'user'
 })
 
-// Artist has many Event
-Artist.hasMany(Event, {
+// User has many Event (for artists)
+User.hasMany(Event, {
     foreignKey: 'artistId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
     as: 'events'
 })
-Event.belongsTo(Artist, {
+Event.belongsTo(User, {
     foreignKey: 'artistId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
     as: 'artist'
 })
 
-// Artist has many PaymentArtist
-Artist.hasMany(PaymentArtist , {
+// User has many PaymentArtist (for artists)
+User.hasMany(PaymentArtist , {
     foreignKey : 'artistId',
-    as: 'payments'
+    as: 'artistPayments'
 })
-PaymentArtist.belongsTo(Artist , {
+PaymentArtist.belongsTo(User , {
     foreignKey : 'artistId',
     as: 'artist'
 })
 
-// Artist has many Comments
-Artist.hasMany(Comments , {
+// User has many Comments (for artists)
+User.hasMany(Comments , {
     foreignKey : 'artistId',
-    as: 'comments'
+    as: 'artistComments'
 })
-Comments.belongsTo(Artist , {
+Comments.belongsTo(User , {
     foreignKey : 'artistId',
     as: 'artist'
 })
@@ -147,12 +146,12 @@ Cheirs.belongsTo(Event , {
     as: 'event'
 })
 
-// EmptySans has one Event
-EmptySans.hasOne(Event, {
+// EmptySans has many Events
+EmptySans.hasMany(Event, {
     foreignKey: 'emptySansId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
-    as: 'event'
+    as: 'events'
 })
 Event.belongsTo(EmptySans, {
     foreignKey: 'emptySansId',
@@ -161,13 +160,46 @@ Event.belongsTo(EmptySans, {
     as: 'emptySans'
 })
 
+// Artist has many Event
+Artist.hasMany(Event, {
+    foreignKey: 'artistId',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    as: 'events'
+})
+Event.belongsTo(Artist, {
+    foreignKey: 'artistId',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    as: 'creator'
+})
+
+// Artist has many Comments
+Artist.hasMany(Comments, {
+    foreignKey: 'artistId',
+    as: 'artistComments'
+})
+Comments.belongsTo(Artist, {
+    foreignKey: 'artistId',
+    as: 'creator'
+})
+
+// Artist has many PaymentArtist
+Artist.hasMany(PaymentArtist, {
+    foreignKey: 'artistId',
+    as: 'artistPayments'
+})
+PaymentArtist.belongsTo(Artist, {
+    foreignKey: 'artistId',
+    as: 'creator'
+})
+
 db
 .sync({alter: true})
 .then(() => console.log('models sync successfuly'))
 .catch((error) => console.log('error to sync' , error))
 
 module.exports = {
-    Artist,
     Cheirs,
     Comments,
     Event,
@@ -175,5 +207,6 @@ module.exports = {
     PaymentUser,
     Ticket,
     EmptySans,
-    User
+    User,
+    Artist
 };

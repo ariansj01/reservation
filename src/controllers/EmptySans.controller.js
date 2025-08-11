@@ -7,7 +7,7 @@ const GetAllEmptySans = async (req, res) => {
             include: [
                 {
                     model: Event,
-                    as: 'event'
+                    as: 'events'
                 }
             ]
         });
@@ -25,7 +25,7 @@ const GetEmptySansById = async (req, res) => {
             include: [
                 {
                     model: Event,
-                    as: 'event'
+                    as: 'events'
                 }
             ]
         });

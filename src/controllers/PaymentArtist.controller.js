@@ -1,4 +1,4 @@
-const { PaymentArtist, Artist } = require('../models');
+const { PaymentArtist, User } = require('../models');
 
 // Get all artist payments with all relations
 const GetAllArtistPayments = async (req, res) => {
@@ -6,7 +6,7 @@ const GetAllArtistPayments = async (req, res) => {
         const payments = await PaymentArtist.findAll({
             include: [
                 {
-                    model: Artist,
+                    model: User,
                     as: 'artist'
                 }
             ]
@@ -24,7 +24,7 @@ const GetArtistPaymentById = async (req, res) => {
         const payment = await PaymentArtist.findByPk(id, {
             include: [
                 {
-                    model: Artist,
+                    model: User,
                     as: 'artist'
                 }
             ]

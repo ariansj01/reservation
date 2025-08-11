@@ -19,9 +19,14 @@ const Artist = sequelize.define('Artist', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    description: {
+    phone: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    role: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'artist',
     },
 });
 

@@ -21,6 +21,11 @@ router.post('/verify-token', authController.VerifyToken);
 router.post('/users', userController.CreateUser);
 router.get('/user/:email', userController.GetUserByEmail);
 router.get('/users', userController.GetUser);
+router.get('/artists', artistController.GetAllArtists);
+router.post('/artists', artistController.CreateArtist);
+router.get('/cheirs', cheirController.GetAllCheirs);
+router.get('/events', eventController.GetAllEvents);
+
 router.post('/verify-captcha', captchaController.verifyCaptcha);
 router.post('/verification-email', sendEmailController.VerificationCode);
 router.post('/send-verification-email', sendEmailController.sendVerificationEmail);
@@ -36,7 +41,6 @@ router.put('/users/:id', userController.UpdateUser);
 router.delete('/users/:id', userController.DeleteUser);
 
 // Event routes
-router.get('/events', eventController.GetAllEvents);
 router.get('/events/:id', eventController.GetEventById);
 router.get('/events/artist/:artistId', eventController.GetEventsByArtistId);
 router.post('/events', eventController.CreateEvent);
@@ -44,9 +48,7 @@ router.put('/events/:id', eventController.UpdateEvent);
 router.delete('/events/:id', eventController.DeleteEvent);
 
 // Artist routes
-router.get('/artists', artistController.GetAllArtists);
 router.get('/artists/:id', artistController.GetArtistById);
-router.post('/artists', artistController.CreateArtist);
 router.put('/artists/:id', artistController.UpdateArtist);
 router.delete('/artists/:id', artistController.DeleteArtist);
 
@@ -65,7 +67,6 @@ router.put('/tickets/:id', ticketController.UpdateTicket);
 router.delete('/tickets/:id', ticketController.DeleteTicket);
 
 // Cheirs routes
-router.get('/cheirs', cheirController.GetAllCheirs);
 router.get('/cheirs/:id', cheirController.GetCheirById);
 router.post('/cheirs', cheirController.CreateCheir);
 router.put('/cheirs/:id', cheirController.UpdateCheir);

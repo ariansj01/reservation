@@ -1,9 +1,11 @@
 const { Artist, Event, Comments, PaymentArtist } = require('../models');
+const bcrypt = require('bcryptjs');
 
 // Get all artists with all relations
 const GetAllArtists = async (req, res) => {
     try {
         const artists = await Artist.findAll({
+            where: { role: 'artist' },
             include: [
                 {
                     model: Event,
@@ -11,15 +13,11 @@ const GetAllArtists = async (req, res) => {
                 },
                 {
                     model: Comments,
-                    as: 'comments',
-                    include: [{
-                        model: User,
-                        as: 'user'
-                    }]
+                    as: 'artistComments'
                 },
                 {
                     model: PaymentArtist,
-                    as: 'payments'
+                    as: 'artistPayments'
                 }
             ]
         });
@@ -34,6 +32,7 @@ const GetArtistById = async (req, res) => {
     try {
         const { id } = req.params;
         const artist = await Artist.findByPk(id, {
+            where: { role: 'artist' },
             include: [
                 {
                     model: Event,
@@ -41,15 +40,11 @@ const GetArtistById = async (req, res) => {
                 },
                 {
                     model: Comments,
-                    as: 'comments',
-                    include: [{
-                        model: User,
-                        as: 'user'
-                    }]
+                    as: 'artistComments'
                 },
                 {
                     model: PaymentArtist,
-                    as: 'payments'
+                    as: 'artistPayments'
                 }
             ]
         });
@@ -67,10 +62,16 @@ const GetArtistById = async (req, res) => {
 // Create new artist
 const CreateArtist = async (req, res) => {
     try {
-        const artist = await Artist.create(req.body);
+        const {email , password , name, phone} = req.body;
+        console.log(password)
+        const hashedPassword = await bcrypt.hash(password, 10)
+        console.log(hashedPassword)
+        const artist = await Artist.create({email , password: hashedPassword , name, phone});
+        console.log(artist)
         res.status(201).json({ message: 'Artist created successfully', data: artist });
     } catch (error) {
         res.status(500).json({ message: 'Error creating artist', error: error.message });
+        console.log(error.message)
     }
 };
 
@@ -79,7 +80,7 @@ const UpdateArtist = async (req, res) => {
     try {
         const { id } = req.params;
         const [updated] = await Artist.update(req.body, {
-            where: { id }
+            where: { id, role: 'artist' }
         });
 
         if (!updated) {
@@ -98,7 +99,7 @@ const DeleteArtist = async (req, res) => {
     try {
         const { id } = req.params;
         const deleted = await Artist.destroy({
-            where: { id }
+            where: { id, role: 'artist' }
         });
 
         if (!deleted) {

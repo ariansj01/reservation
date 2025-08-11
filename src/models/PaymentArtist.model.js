@@ -18,6 +18,10 @@ const PaymentArtist = sequelize.define('PaymentArtist', {
     artistId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: 'Artists',
+            key: 'id'
+        }
     },
 });
 

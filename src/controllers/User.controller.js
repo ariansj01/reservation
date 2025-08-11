@@ -7,11 +7,11 @@ const GetUser = async(req,res) => {
             include: [
                 {
                     model: Comments,
-                    as: 'comments'
+                    as: 'userComments'
                 },
                 {
                     model: PaymentUser,
-                    as: 'payments'
+                    as: 'userPayments'
                 },
                 {
                     model: Ticket,
@@ -55,11 +55,11 @@ const UpdateUser = async(req,res) => {
             include: [
                 {
                     model: Comments,
-                    as: 'comments'
+                    as: 'userComments'
                 },
                 {
                     model: PaymentUser,
-                    as: 'payments'
+                    as: 'userPayments'
                 },
                 {
                     model: Ticket,
@@ -100,11 +100,11 @@ const GetUserByEmail = async(req,res) => {
             include: [
                 {
                     model: Comments,
-                    as: 'comments'
+                    as: 'userComments'
                 },
                 {
                     model: PaymentUser,
-                    as: 'payments'
+                    as: 'userPayments'
                 },
                 {
                     model: Ticket,

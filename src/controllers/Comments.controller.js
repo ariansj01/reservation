@@ -1,4 +1,4 @@
-const { Comments, User, Event, Artist } = require('../models');
+const { Comments, User, Event } = require('../models');
 // Get all comments with all relations
 const GetAllComments = async (req, res) => {
     try {
@@ -13,7 +13,7 @@ const GetAllComments = async (req, res) => {
                     as: 'event'
                 },
                 {
-                    model: Artist,
+                    model: User,
                     as: 'artist'
                 }
             ]
@@ -39,7 +39,7 @@ const GetCommentById = async (req, res) => {
                     as: 'event'
                 },
                 {
-                    model: Artist,
+                    model: User,
                     as: 'artist'
                 }
             ]

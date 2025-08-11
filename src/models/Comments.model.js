@@ -26,6 +26,10 @@ const Comments = sequelize.define('Comments', {
     artistId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: 'Artists',
+            key: 'id'
+        }
     },
 });
 
