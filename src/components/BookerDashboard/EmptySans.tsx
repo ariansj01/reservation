@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../API/Interceptore.ts';
+import { toast } from 'react-toastify';
+import Notification from '../Notification';
 
 interface Sans {
   id: string;
@@ -46,6 +48,9 @@ const EmptySans = () => {
     openBuyTicket: '',
     emptySansId: 1,
   });
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState<'success' | 'error'>('success');
 
   const handleSansSelect = (sans: Sans) => {
     setSelectedSans(sans);
@@ -101,7 +106,6 @@ const EmptySans = () => {
       };
       console.log(formattedData)
       const response = await api.post('/events', formattedData)
-      
       if (response.status === 201) {
         // Delete the empty sans after successful event creation
         try {
@@ -128,8 +132,15 @@ const EmptySans = () => {
           emptySansId: 0,
         });
       }
-    } catch (error) {
+    } catch (error : any) {
       console.error('Error creating event:', error);
+      if(error.response?.status === 404){
+        toast.error(error.response.data.message)
+        setShowNotification(true)
+        setNotificationMessage(error.response.data.message)
+        setNotificationType('error')
+        return
+      }  
     }
   };
 
@@ -356,6 +367,16 @@ const EmptySans = () => {
           </motion.button>
         </div>
       </form>
+      {showNotification && (
+        <Notification
+          message={notificationMessage}
+          type={notificationType}
+          duration={4000}
+          onClose={() => {
+            setShowNotification(false);
+          }}
+        />
+      )}
     </motion.div>
   );
 };

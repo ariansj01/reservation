@@ -9,7 +9,7 @@ const Register = () => {
     email: '',
     phone: '',
     password: '',
-    role: 'user'
+    role: ''
   })
   const [showNotification, setShowNotification] = useState(false)
   const [notificationMessage, setNotificationMessage] = useState('')
@@ -27,28 +27,48 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-    e.preventDefault()
-      let register = await api.post('/users', formData)
-      console.log(register)
-      if (register.status === 201) {
-        localStorage.setItem('AccessToken', register.data.AccessToken);
-        localStorage.setItem('RefreshToken', register.data.RefreshToken);
-        localStorage.setItem('email', formData.email);
-        setNotificationMessage('Registration successful! Please verify your email.');
-        setNotificationType('success');
-        setShowNotification(true);
-        // const response = await api.post('/send-verification-email',formData.email)
-        // console.log(response)
-        setTimeout(() => {
-          navigate('/login');
-          // navigate('/verify-email');
-        }, 2000);
+      if(formData.role === 'artist'){
+        let register = await api.post('/artists', { name: formData.name, email: formData.email, phone: formData.phone, password: formData.password})
+        console.log(register)
+        if (register.status === 201) {
+          localStorage.setItem('AccessToken', register.data.AccessToken);
+          localStorage.setItem('RefreshToken', register.data.RefreshToken);
+          localStorage.setItem('email', formData.email);
+          setNotificationMessage('Registration successful! Please verify your email.');
+          setNotificationType('success');
+          setShowNotification(true);
+          // const response = await api.post('/send-verification-email',formData.email)
+          // console.log(response)
+          setTimeout(() => {
+            navigate('/login');
+            // navigate('/verify-email');
+          }, 2000);
+        }
+      }else{
+        let register = await api.post('/users', formData)
+        console.log(register)
+        if (register.status === 201) {
+          localStorage.setItem('AccessToken', register.data.AccessToken);
+          localStorage.setItem('RefreshToken', register.data.RefreshToken);
+          localStorage.setItem('email', formData.email);
+          setNotificationMessage('Registration successful! Please verify your email.');
+          setNotificationType('success');
+          setShowNotification(true);
+          // const response = await api.post('/send-verification-email',formData.email)
+          // console.log(response)
+          setTimeout(() => {
+            navigate('/login');
+            // navigate('/verify-email');
+          }, 2000);
+        }
       }
-    } catch (err) {
+    } catch (err : any) {
       console.log(err);
-      setNotificationMessage('Registration failed. Please try again.');
-      setNotificationType('error');
-      setShowNotification(true);
+      if(err.response?.status === 400){
+        setNotificationMessage(err.response.data.message);
+        setNotificationType('error');
+        setShowNotification(true);
+      }
     }
   }
 

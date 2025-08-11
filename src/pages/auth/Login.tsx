@@ -29,6 +29,7 @@ interface GoogleJwtPayload {
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
+    role: 'user',
     password: ''
   })
   const [showNotification, setShowNotification] = useState(false)
@@ -80,14 +81,29 @@ const Login = () => {
       setShowNotification(true);
       return;
     }
+    let users = await api.get('/users')
+    let artists = await api.get('/artists')
+    let user = users.data.data.filter((user:any) => user.email === formData.email)
+    localStorage.setItem('user' , JSON.stringify(user))
+    formData.role = 'user'
+    console.log(user)
+    if(user.length === 0){
+      let artist = artists.data.data.filter((artist:any) => artist.email === formData.email)
+      formData.role = 'artist'
+      console.log(artist[0])
+      localStorage.setItem('user' , JSON.stringify(artist))
+      if(artist.length === 0){
+        setNotificationMessage('User not found');
+        setNotificationType('error');
+        setShowNotification(true);
+        return;
+      }
+    }
     try {
-      let login = await api.post('/login', formData)
-      let users = await api.get('/users')
-      let user = users.data.data.filter((user:any) => user.email === formData.email)
-
+      let login = await api.post('/login', {email: formData.email, password: formData.password, role: formData.role})
+      
       if (login.status === 200) {
         localStorage.setItem('email', formData.email);
-        localStorage.setItem('user' , JSON.stringify(user))
         localStorage.setItem('AccessToken', login.data.AccessToken);
         localStorage.setItem('RefreshToken', login.data.RefreshToken);
         setNotificationMessage('Login successful!');

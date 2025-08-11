@@ -7,11 +7,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 // import PaymentButton from '../../components/Paypal';
 
 interface ApiChair {
-  id: number;
+  id?: number;
   row: string;
   number: string;
   type: string;
-  userId: number;
+  userId: any;
   eventId: number;
   price: string;
   status: boolean;
@@ -91,11 +91,13 @@ const BookingConcert = () => {
   }>>([]);
   // console.log(setPaymentLogs(paymentLogs))
   const [comments, setComments] = useState<Comment[]>([]);
+  const [artistsId, setArtistsId] = useState<any>(0);
   const [newComment, setNewComment] = useState({
     text: '',
     rating: 0
   });
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  let userID = JSON.parse(localStorage.getItem('user') || '[]')[0]?.id
   const [chairs, setChairs] = useState<Chair[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -103,6 +105,14 @@ const BookingConcert = () => {
   const fetchEvents = async () => {
     try {
       const response = await api.get('/events')
+      const artists = await api.get('/artists')
+      response.data.data.map((item : any) => {
+        artists.data.data.map((i:any) => {
+          if (i.id === item.id) {
+            setArtistsId(i.id)            
+          }
+        })
+      })
       console.log(response)
       if (response.status === 200) {
         setEvents(response.data.data);
@@ -213,8 +223,11 @@ const BookingConcert = () => {
         const initialChairs = generateChairs();
         console.log(initialChairs)
         try {
-          for (const chair of initialChairs) {
-            await api.post('/cheirs', chair);
+          const GetCheirs = await api.get('/cheirs')
+          if (GetCheirs.data.data.length < 1) {
+            for (const chair of initialChairs) {
+              await api.post('/cheirs', chair);
+            }
           }
           // After creating initial chairs, fetch them
           const response = await api.get('/cheirs', {
@@ -237,11 +250,11 @@ const BookingConcert = () => {
   // Fetch payment history for current user
   useEffect(() => {
     const fetchPayments = async () => {
-      if (currentUserId) {
+      if (userID) {
         try {
           const response = await api.get('/user-payments', {
             params: {
-              userId: currentUserId
+              userId: userID
             }
           });
           if (response.status === 200) {
@@ -259,11 +272,11 @@ const BookingConcert = () => {
   // Fetch tickets for current user
   useEffect(() => {
     const fetchTickets = async () => {
-      if (currentUserId) {
+      if (userID) {
         try {
           const response = await api.get('/tickets', {
             params: {
-              userId: currentUserId
+              userId: userID
             }
           });
           if (response.status === 200) {
@@ -287,13 +300,13 @@ const BookingConcert = () => {
     for (let row = 1; row <= 3; row++) {
       for (let num = 1; num <= 10; num++) {
         chairs.push({
-          id: id++,
+          // id: id++,
           row: row.toString(),
           number: num.toString(),
           type: 'vip',
           status: false,
           price: selectedEvent?.vipPrice || '0',
-          userId: 0,
+          userId: JSON.parse(localStorage.getItem('user') || '[]')[0]?.id,
           eventId: selectedEvent?.id || 0
         });
       }
@@ -303,13 +316,13 @@ const BookingConcert = () => {
     for (let row = 4; row <= 8; row++) {
       for (let num = 1; num <= 12; num++) {
         chairs.push({
-          id: id++,
+          // id: id++,
           row: row.toString(),
           number: num.toString(),
           type: 'normal',
           status: false,
           price: selectedEvent?.normalPrice || '0',
-          userId: 0,
+          userId: JSON.parse(localStorage.getItem('user') || '[]')[0]?.id,
           eventId: selectedEvent?.id || 0
         });
       }
@@ -364,7 +377,7 @@ const BookingConcert = () => {
 
   // Update the chair display in the UI
   const renderChair = (chair: Chair) => {
-    const isSelected = selectedChairs.includes(chair.id);
+    const isSelected = selectedChairs.includes(chair.id || 0);
     const isReserved = chair.status === true;
     
     return (
@@ -380,7 +393,7 @@ const BookingConcert = () => {
           shadow-lg hover:shadow-xl
           relative
         `}
-        onClick={() => !isReserved && handleChairClick(chair.id)}
+        onClick={() => !isReserved && handleChairClick(chair.id || 0)}
       >
         <div className="absolute top-1 left-1 w-2 h-2 bg-gray-900 rounded-full"></div>
         <div className="absolute top-1 right-1 w-2 h-2 bg-gray-900 rounded-full"></div>
@@ -395,7 +408,7 @@ const BookingConcert = () => {
   };
 
   const handlePayment = async () => {
-    if (!selectedEvent || !currentUserId || selectedChairs.length === 0) return;
+    if (!selectedEvent || !userID || selectedChairs.length === 0) return;
 
     setPaymentStatus('processing');
     try {
@@ -405,7 +418,7 @@ const BookingConcert = () => {
       if (chairsResponse.status === 200) {
         const existingChairs = chairsResponse.data.data;
         const reservedChairs = existingChairs.filter((chair: Chair) => 
-          selectedChairs.includes(chair.id) && chair.status === true
+          selectedChairs.includes(chair.id || 0) && chair.status === true
         );
 
         if (reservedChairs.length > 0) {
@@ -421,7 +434,7 @@ const BookingConcert = () => {
               row: chair.row,
               number: chair.number,
               type: chair.type,
-              userId: currentUserId,
+              userId: userID,
               eventId: selectedEvent.id,
               price: chair.price,
               status: true
@@ -450,7 +463,7 @@ const BookingConcert = () => {
           cardNumber: cardDetails.number,
           dateCard: cardDetails.expiry,
           cvv: cardDetails.cvv,
-          userId: currentUserId,
+          userId: userID,
           eventId: selectedEvent.id,
           cheireId: updatedChairs.map(chair => chair.id).join(',')
         };
@@ -466,7 +479,7 @@ const BookingConcert = () => {
           // Create tickets for each chair
           for (const chair of updatedChairs) {
             const ticketData = {
-              userId: currentUserId,
+              userId: userID,
               eventId: selectedEvent.id,
               cheireId: chair.id
             };
@@ -476,8 +489,8 @@ const BookingConcert = () => {
 
           // Update UI
           const updatedChairsList = chairs.map(chair => 
-            selectedChairs.includes(chair.id) 
-              ? { ...chair, status: true, userId: currentUserId }
+            selectedChairs.includes(chair.id || 0) 
+              ? { ...chair, status: true, userId: userID }
               : chair
           );
           setChairs(updatedChairsList);
@@ -527,14 +540,14 @@ const BookingConcert = () => {
   }, [selectedEvent]);
 
   const handleAddComment = async () => {
-    if (newComment.text.trim() && selectedEvent && currentUserId) {
+    if (newComment.text.trim() && selectedEvent && userID) {
       try {
         const commentData = {
           text: newComment.text,
           eventId: selectedEvent.id,
           rating: newComment.rating,
-          userId: currentUserId,
-          artistId: 9 // Fixed artist ID as per requirements
+          userId: userID,
+          artistId: artistsId // Fixed artist ID as per requirements
         };
 
         const response = await api.post('/comments', commentData);
