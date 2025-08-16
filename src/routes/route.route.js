@@ -19,18 +19,21 @@ router.post('/login', authController.login);
 router.post('/verify-token', authController.VerifyToken);
 // router.post('/verify-code', authController.verifyCode);
 router.post('/users', userController.CreateUser);
-router.get('/user/:email', userController.GetUserByEmail);
-router.get('/users', userController.GetUser);
-router.get('/artists', artistController.GetAllArtists);
+
 router.post('/artists', artistController.CreateArtist);
-router.get('/cheirs', cheirController.GetAllCheirs);
-router.get('/events', eventController.GetAllEvents);
 
 router.post('/verify-captcha', captchaController.verifyCaptcha);
 router.post('/verification-email', sendEmailController.VerificationCode);
 router.post('/send-verification-email', sendEmailController.sendVerificationEmail);
 
 router.use(checkAuth)
+
+router.get('/user/:email', userController.GetUserByEmail);
+
+router.get('/users', userController.GetUser);
+router.get('/artists', artistController.GetAllArtists);
+router.get('/cheirs', cheirController.GetAllCheirs);
+router.get('/events', eventController.GetAllEvents);
 
 // PayPal routes
 router.get('/payment', paypalController.payment);
