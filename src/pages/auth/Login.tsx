@@ -201,6 +201,18 @@ const Login = () => {
             <p className="mt-2 text-sm text-gray-300">
               Please sign in to your account
             </p>
+            <div className="mt-2 text-sm text-gray-300">
+            <div className="text-gray-300 text-sm">
+              <p>
+              artist =
+              user : ariansj.ir14@gmail.com - pass : 1234
+              </p>
+              <p>
+              user =
+              user : ariansj.ir@gmail.com - pass : 1234
+              </p>
+            </div>
+            </div>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
